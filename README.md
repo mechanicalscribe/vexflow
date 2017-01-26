@@ -1,8 +1,13 @@
-# VexFlow MusicXML plugin (SVG version)
+# VexFlow MusicXML plugin (Canvas & SVG version)
 
-This is a fork of [@mechanicalscribe's spectacular fork of VexFlow](https://github.com/mechanicalscribe/vexflow-musicxml) that adds support for loading MusicXML documents and render it in SVG instead of canvas.
+This is a fork of [@mechanicalscribe's fork of VexFlow-Musicxml](https://github.com/mechanicalscribe/vexflow-musicxml) that adds support for loading MusicXML documents.
 
-Given limited time, now the plugin is SVG only, options between canvas and SVG will be added soon.
+This fork adds the functionality of choosing render type, i.e. `canvas` or `svg`.
+
+To specify it, just specify `canvasType` when calling `draw`, available options are `canvas` and `svg`
+```javascript
+VexFormatter.draw(content, {canvasType: 'canvas'});
+```
 
 ## Installation
 
