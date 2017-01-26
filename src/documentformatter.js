@@ -248,9 +248,21 @@ Vex.Flow.DocumentFormatter.prototype.getMinMeasureWidth = function(m) {
     }, this);
 
     // Create dummy canvas to use for formatting (required by TextNote)
-    var canvas = document.createElement("svg");
-    var context = new Vex.Flow.Renderer(canvas,
-                                     Vex.Flow.Renderer.Backends.SVG).ctx;
+
+    var canvas, context;
+    switch (this.canvasType){
+        case 'canvas':
+            var canvas = document.createElement("canvas");
+            var context = Vex.Flow.Renderer.bolsterCanvasContext(
+                                 canvas.getContext("2d"));
+            break;
+        case 'svg':
+            canvas = document.createElement("svg");
+            context = new Vex.Flow.Renderer(canvas, Vex.Flow.Renderer.Backends.SVG).ctx;
+            break;
+        default:
+            console.error('Invalid canvasType');
+    }
 
     var allVfVoices = [];
     var startStave = 0; // stave for part to start on
@@ -576,12 +588,14 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.getStaveWidth = function(m, s) {
   return this.measureWidth[m];
 }
 
-Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
+Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, {canvasType = 'svg'}={}) {
   if (this._htmlElem != elem) {
     this._htmlElem = elem;
     elem.innerHTML = "";
     this.canvases = [];
   }
+
+  this.canvasType = canvasType; // Either canvas or svg
 
   //var canvasWidth = $(elem).width() - 10; // TODO: remove jQuery dependency
   var canvasWidth = elem.offsetWidth - 10;
@@ -598,7 +612,7 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
   this.setWidth(renderWidth);
 
   // Remove all non-canvas child nodes of elem using jQuery
-  $(elem).children(":not(svg)").remove();
+  $(elem).children(`:not(${this.canvasType})`).remove();
 
   var b = 0;
   while (this.getBlock(b)) {
@@ -608,7 +622,7 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
     var height = Math.ceil(dims[1] * this.zoom);
 
     if (! this.canvases[b]) {
-      canvas = document.createElement('svg');
+      canvas = document.createElement(this.canvasType);
       canvas.width = width * this.scale;
       canvas.height = height * this.scale;
 
@@ -627,9 +641,18 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
       if (! canvas.parentNode)
         elem.appendChild(canvas); // Insert at the end of elem
       this.canvases[b] = canvas;
-      context = new Vex.Flow.Renderer(canvas, Vex.Flow.Renderer.Backends.SVG).ctx;
-      context.width = canvas.width;
-      context.height = canvas.height;
+      switch (this.canvasType){
+          case 'canvas':
+            context = Vex.Flow.Renderer.bolsterCanvasContext(canvas.getContext("2d"));
+            break;
+          case 'svg':
+            context = new Vex.Flow.Renderer(canvas, Vex.Flow.Renderer.Backends.SVG).ctx;
+            context.width = canvas.width;
+            context.height = canvas.height;
+            break;
+          default:
+            console.error('Invalid canvasType');
+      }
     }
     else {
       canvas = this.canvases[b];
@@ -642,11 +665,20 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
         canvas.style.height = height.toString() + "px";
       }
 
-      context = new Vex.Flow.Renderer(canvas,
-                                       Vex.Flow.Renderer.Backends.SVG).ctx;
-      context.width = canvas.width;
-      context.height = canvas.height;
+      switch (this.canvasType){
+          case 'canvas':
+            context = Vex.Flow.Renderer.bolsterCanvasContext(canvas.getContext("2d"));
+            break;
+          case 'svg':
+            context = new Vex.Flow.Renderer(canvas, Vex.Flow.Renderer.Backends.SVG).ctx;
+            context.width = canvas.width;
+            context.height = canvas.height;
+            break;
+          default:
+            console.error('Invalid canvasType');
+      }
     }
+
     // TODO: Figure out why setFont method is called
     if (typeof context.setFont != "function") {
       context.setFont = function(font) { this.font = font; return this; };

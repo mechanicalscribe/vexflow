@@ -37,7 +37,7 @@
         var content = $(".content")[0];
         if (VexDocument) {
           VexFormatter = VexDocument.getFormatter();
-          VexFormatter.draw(content);
+          VexFormatter.draw(content, {canvasType: 'canvas'});
         }
 
         var elapsed = (new Date().getTime() - start)/1000;
