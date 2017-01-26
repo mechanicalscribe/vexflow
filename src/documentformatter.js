@@ -248,9 +248,9 @@ Vex.Flow.DocumentFormatter.prototype.getMinMeasureWidth = function(m) {
     }, this);
 
     // Create dummy canvas to use for formatting (required by TextNote)
-    var canvas = document.createElement("canvas");
-    var context = Vex.Flow.Renderer.bolsterCanvasContext(
-                        canvas.getContext("2d"));
+    var canvas = document.createElement("svg");
+    var context = new Vex.Flow.Renderer(canvas,
+                                     Vex.Flow.Renderer.Backends.SVG).ctx;
 
     var allVfVoices = [];
     var startStave = 0; // stave for part to start on
@@ -480,7 +480,7 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.getBlock = function(b) {
         s.addModifier(Vex.Merge({type: "time", automatic: true}, s.time));
     }
   });
-  
+
   // Store x, width of staves (y calculated automatically)
   if (! this.measureX) this.measureX = new Array();
   if (! this.measureWidth) this.measureWidth = new Array();
@@ -584,7 +584,7 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
   }
 
   //var canvasWidth = $(elem).width() - 10; // TODO: remove jQuery dependency
-  var canvasWidth = elem.offsetWidth - 10; 
+  var canvasWidth = elem.offsetWidth - 10;
 
   var renderWidth = Math.floor(canvasWidth / this.zoom);
 
@@ -598,7 +598,7 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
   this.setWidth(renderWidth);
 
   // Remove all non-canvas child nodes of elem using jQuery
-  $(elem).children(":not(canvas)").remove();
+  $(elem).children(":not(svg)").remove();
 
   var b = 0;
   while (this.getBlock(b)) {
@@ -608,13 +608,15 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
     var height = Math.ceil(dims[1] * this.zoom);
 
     if (! this.canvases[b]) {
-      canvas = document.createElement('canvas');
+      canvas = document.createElement('svg');
       canvas.width = width * this.scale;
       canvas.height = height * this.scale;
+
       if (this.scale > 1) {
         canvas.style.width = width.toString() + "px";
         canvas.style.height = height.toString() + "px";
       }
+
       canvas.id = elem.id + "_canvas" + b.toString();
       // If a canvas exists after this one, insert before that canvas
       for (var a = b + 1; this.getBlock(a); a++)
@@ -625,19 +627,25 @@ Vex.Flow.DocumentFormatter.Liquid.prototype.draw = function(elem, options) {
       if (! canvas.parentNode)
         elem.appendChild(canvas); // Insert at the end of elem
       this.canvases[b] = canvas;
-      context = Vex.Flow.Renderer.bolsterCanvasContext(canvas.getContext("2d"));
+      context = new Vex.Flow.Renderer(canvas, Vex.Flow.Renderer.Backends.SVG).ctx;
+      context.width = canvas.width;
+      context.height = canvas.height;
     }
     else {
       canvas = this.canvases[b];
       canvas.style.display = "inherit";
       canvas.width = width * this.scale;
       canvas.height = height * this.scale;
+
       if (this.scale > 1) {
         canvas.style.width = width.toString() + "px";
         canvas.style.height = height.toString() + "px";
       }
-      context = Vex.Flow.Renderer.bolsterCanvasContext(canvas.getContext("2d"));
-      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      context = new Vex.Flow.Renderer(canvas,
+                                       Vex.Flow.Renderer.Backends.SVG).ctx;
+      context.width = canvas.width;
+      context.height = canvas.height;
     }
     // TODO: Figure out why setFont method is called
     if (typeof context.setFont != "function") {

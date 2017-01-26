@@ -333,13 +333,13 @@ Vex.Flow.Backend.MusicXML.prototype.parseNote = function(noteElem, attrs) {
         break;
       case "time-modification":
         var num_notes = elem.getElementsByTagName("actual-notes")[0];
-        var beats_occupied = elem.getElementsByTagName("normal-notes")[0];
-        if (num_notes && beats_occupied) {
+        var notes_occupied = elem.getElementsByTagName("normal-notes")[0];
+        if (num_notes && notes_occupied) {
           num_notes = parseInt(num_notes.textContent);
-          beats_occupied = parseInt(beats_occupied.textContent);
-          if (! (num_notes > 0 && beats_occupied > 0)) break;
-          noteObj.tickMultiplier = new Vex.Flow.Fraction(beats_occupied, num_notes);
-          noteObj.tuplet = {num_notes: num_notes, beats_occupied: beats_occupied};
+          notes_occupied = parseInt(notes_occupied.textContent);
+          if (! (num_notes > 0 && notes_occupied > 0)) break;
+          noteObj.tickMultiplier = new Vex.Flow.Fraction(notes_occupied, num_notes);
+          noteObj.tuplet = {num_notes: num_notes, notes_occupied: notes_occupied};
         }
         break;
       case "rest":

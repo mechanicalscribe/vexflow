@@ -4,7 +4,7 @@
   <meta name="viewport" content="initial-scale = 1.0, minimum-scale = 1.0, maximum-scale = 1.0, user-scalable = no">
 
   <!-- VexFlow Compiled Source -->
-  <!--<script src="../node_modules/vexflow/releases/vexflow-min.js"></script>-->
+  <script src="../node_modules/vexflow/releases/vexflow-min.js"></script>
   <script src="../vexflow.musicxml.js"></script>
 
   <!-- Support Sources -->
@@ -41,6 +41,7 @@
         $(window).resize(function() {
           if (! debouncedResize)
             debouncedResize = setTimeout(function() {
+              content.empty();
               VexFormatter.draw(content);
               debouncedResize = null;
             }, 500);
