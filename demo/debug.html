@@ -41,14 +41,7 @@
         }
 
         var elapsed = (new Date().getTime() - start)/1000;
-        var debouncedResize = null;
-        $(window).resize(function() {
-          if (! debouncedResize)
-            debouncedResize = setTimeout(function() {
-              VexFormatter.draw(content);
-              debouncedResize = null;
-            }, 500);
-        });
+
       }
     });
   </script>

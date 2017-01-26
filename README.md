@@ -1,8 +1,8 @@
-# VexFlow MusicXML plugin
+# VexFlow MusicXML plugin (SVG version)
 
-This is a fork of [@ringw's spectacular fork of VexFlow](https://github.com/ringw/vexflow/tree/musicxml) that adds support for loading MusicXML documents. That effort, which quite successful, is not actively synced with the [upstream repository](https://github.com/0xfe/vexflow), so it does not enjoy the benefits of VexFlow's active development.
+This is a fork of [@mechanicalscribe's spectacular fork of VexFlow](https://github.com/mechanicalscribe/vexflow-musicxml) that adds support for loading MusicXML documents and render it in SVG instead of canvas.
 
-Given the difficult of maintaining forks for long periods, this project simply organizes @ringw's contribution as a plugin to the core VexFlow project. I've removed everything except the [files that are specific to the fork](https://github.com/ringw/vexflow/compare/0xfe:master...musicxml).
+Given limited time, now the plugin is SVG only, options between canvas and SVG will be added soon.
 
 ## Installation
 
