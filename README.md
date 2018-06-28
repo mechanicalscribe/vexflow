@@ -13,7 +13,7 @@ VexFormatter.draw(content, {canvasType: 'canvas'});
 
 Clone this repo and install the dependencies
 
-	git clone git@github.com:mechanicalscribe/vexflow-musicxml.git && cd vexflow-musicxml
+	git clone git@github.com:yodahuang/vexflow-musicxml.git && cd vexflow-musicxml
 	npm install
 
 This will install VexFlow and a few build dependencies to [node_modules](/node_modules). To build the plugin, just run the build script:
