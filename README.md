@@ -1,14 +1,19 @@
-# VexFlow MusicXML plugin
+# VexFlow MusicXML plugin (Canvas & SVG version)
 
-This is a fork of [@ringw's spectacular fork of VexFlow](https://github.com/ringw/vexflow/tree/musicxml) that adds support for loading MusicXML documents. That effort, which quite successful, is not actively synced with the [upstream repository](https://github.com/0xfe/vexflow), so it does not enjoy the benefits of VexFlow's active development.
+This is a fork of [@mechanicalscribe's fork of VexFlow-Musicxml](https://github.com/mechanicalscribe/vexflow-musicxml) that adds support for loading MusicXML documents.
 
-Given the difficult of maintaining forks for long periods, this project simply organizes @ringw's contribution as a plugin to the core VexFlow project. I've removed everything except the [files that are specific to the fork](https://github.com/ringw/vexflow/compare/0xfe:master...musicxml).
+This fork adds the functionality of choosing render type, i.e. `canvas` or `svg`.
+
+To specify it, just specify `canvasType` when calling `draw`, available options are `canvas` and `svg`
+```javascript
+VexFormatter.draw(content, {canvasType: 'canvas'});
+```
 
 ## Installation
 
 Clone this repo and install the dependencies
 
-	git clone git@github.com:mechanicalscribe/vexflow-musicxml.git && cd vexflow-musicxml
+	git clone git@github.com:yodahuang/vexflow-musicxml.git && cd vexflow-musicxml
 	npm install
 
 This will install VexFlow and a few build dependencies to [node_modules](/node_modules). To build the plugin, just run the build script:

@@ -305,7 +305,7 @@ Vex.Flow.Measure.Stave = function(object) {
   this.modifiers = new Array();
   if (object.modifiers instanceof Array) {
     for (var i = 0; i < object.modifiers.length; i++)
-      this.addModifier(object.modifiers[i]);  
+      this.addModifier(object.modifiers[i]);
   }
 
   this.type = "stave";
@@ -426,7 +426,7 @@ Vex.Flow.Measure.Note = function(object) {
                       ? new Vex.Flow.Fraction(1, 1) : null;
   this.tuplet = (typeof object.tuplet == "object" && object.tuplet)
               ? {num_notes: object.tuplet.num_notes,
-                 beats_occupied: object.tuplet.beats_occupied}
+                 notes_occupied: object.tuplet.notes_occupied}
               : null;
   this.stem_direction = (typeof object.stem_direction == "number")
                       ? object.stem_direction : null;
